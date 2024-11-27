@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+    <!-- 热门分类展示 -->
+    {% for category in hot_categories %}
+        <div class="category-section">
+            <h2>{{ category.name }}</h2>
+            <div class="product-grid">
+                {% for product in category_products[category] %}
+                    <div class="product-card">
+                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                        <h3>{{ product.name }}</h3>
+                        <p>¥{{ product.price }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,21 @@
+<!-- templates/search_results.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>搜索结果</h2>
+
+    {% if products %}
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <p>¥{{ product.price }}</p>
+                    <a href="{{ url_for('product_detail', product_id=product.id) }}">查看详情</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>没有找到相关商品</p>
+    {% endif %}
+{% endblock %}

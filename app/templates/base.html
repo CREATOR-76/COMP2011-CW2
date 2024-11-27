@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav>
+        <!-- 导航栏部分 -->
+        <div class="search-container">
+            <form method="POST" action="{{ url_for('search') }}">
+                {{ search_form.hidden_tag() }}
+                {{ search_form.query(class="search-input", placeholder="搜索商品...") }}
+                {{ search_form.submit(class="search-button") }}
+            </form>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
