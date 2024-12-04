@@ -12,7 +12,7 @@ migrate = Migrate(app, db)
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth'
 
-# 用户加载函数
+# Load the user
 @login_manager.user_loader
 def load_user(id):
     from app.models import User

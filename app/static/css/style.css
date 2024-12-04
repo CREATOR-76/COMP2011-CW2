@@ -13,7 +13,7 @@ footer{
     float: left;
     margin-top: 50px;
     width: 100%;
-    height: 250px;
+    height: 310px;
     color: white;
 }
 .copyright,.footer-bar{
@@ -423,4 +423,7 @@ footer{
 }
 .show-image{
     padding: 10px;
+}
+.detail-quantity{
+    max-width: 200px
 }

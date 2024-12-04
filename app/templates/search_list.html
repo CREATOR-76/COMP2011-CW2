@@ -2,7 +2,7 @@
 {% block title %}Search Results{% endblock %}
 {% block content %}
 <div class="container">
-    <!-- 页面标题部分 -->
+    <!-- Head title -->
     <div class="row mb-4">
         <div class="col">
             {% if search_query %}
@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <!-- 商品展示部分 -->
+    <!-- Product display -->
     {% if products %}
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
             {% for product in products %}
@@ -39,11 +39,11 @@
             {% endfor %}
         </div>
 
-        <!-- 分页导航 -->
+        <!-- Divide into different page -->
         {% if pagination and pagination.pages > 1 %}
         <nav aria-label="Page navigation" class="mt-4">
             <ul class="pagination justify-content-center">
-                <!-- 上一页按钮 -->
+                <!-- Last page -->
                 <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
                     <a class="page-link"
                        href="{% if pagination.has_prev %}{{ url_for('search', page=pagination.prev_num, query=search_query) }}{% else %}#{% endif %}"
@@ -53,7 +53,7 @@
                     </a>
                 </li>
 
-                <!-- 页码按钮 -->
+                <!-- Button -->
                 {% for page in pagination.iter_pages(left_edge=2, left_current=2, right_current=2, right_edge=2) %}
                     {% if page %}
                         <li class="page-item {% if page == pagination.page %}active{% endif %}">
@@ -66,7 +66,7 @@
                     {% endif %}
                 {% endfor %}
 
-                <!-- 下一页按钮 -->
+                <!-- Next page -->
                 <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
                     <a class="page-link"
                        href="{% if pagination.has_next %}{{ url_for('search', page=pagination.next_num, query=search_query) }}{% else %}#{% endif %}"
@@ -79,7 +79,7 @@
         </nav>
         {% endif %}
     {% else %}
-        <!-- 无商品时的显示 -->
+        <!-- If no products -->
         <div class="text-center py-5">
             <div class="alert alert-info" role="alert">
                 <h4 class="alert-heading">No Products Found</h4>

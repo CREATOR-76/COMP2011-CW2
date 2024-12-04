@@ -60,7 +60,7 @@
     </div>
     {% endif %}
 
-    <!-- 基于收藏的推荐 -->
+    <!-- The favorite recommend -->
     {% if favorite_recommendations %}
     <div class="section mb-5 recommend-section">
         <div class="d-flex align-items-center mb-4">
@@ -90,7 +90,7 @@
     </div>
     {% endif %}
 
-    <!-- 最近收藏部分 -->
+    <!-- The favorite list -->
     {% if current_user.is_authenticated and recent_favorites %}
     <div class="section mb-5 recommend-section-small">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -116,7 +116,7 @@
     </div>
     {% endif %}
 
-    <!-- 最近浏览部分 -->
+    <!-- The recent view -->
     <div class="section mb-5 recommend-section-small">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="index-head">Recently Viewed</h2>
