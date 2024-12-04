@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+
+<div class="container py-4">
+    <div class="card">
+        <div class="card-body">
+            <div id="productData" class="row" data-product-id="{{ product.id }}" data-product-stock="{{ product.stock }}">
+                <div class="col-md-6">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                </div>
+
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="mb-0">{{ product.name }}</h2>
+                        {% if current_user.is_authenticated %}
+                        <button id="favoriteBtn" class="btn btn-outline-danger">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <h4 class="text-primary">${{ "%.2f"|format(product.price) }}</h4>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5>Product Details:</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>Category:</strong> {{ product.Gender }}</li>
+                            <li><strong>Product Type:</strong> {{ product.product_type }}</li>
+                            <li><strong>Color:</strong> {{ product.color }}</li>
+                            <li><strong>Suitable for:</strong> {{ product.usage }}</li>
+                            <li><strong>Stock:</strong>
+                                {% if product.stock > 0 %}
+                                    <span class="text-success">{{ product.stock }} available</span>
+                                {% else %}
+                                    <span class="text-danger">Out of stock</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Description:</h5>
+                        <p>{{ product.description }}</p>
+                    </div>
+
+                    {% if product.stock > 0 %}
+                    <div class="mb-3">
+                        <label>Quantity</label>
+                        <div class="input-group" style="max-width: 200px;">
+                            <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="{{ product.stock }}">
+                        </div>
+                    </div>
+
+                    <button onclick="addToCart()" class="btn btn-primary">Add to Cart</button>
+                    {% else %}
+                    <button class="btn btn-secondary" disabled>Out of Stock</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for success message -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="successModalMessage">Product added to cart successfully!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,21 +1,143 @@
 {% extends "base.html" %}
-
-{% block title %}首页{% endblock %}
-
+{% block title %}Homepage{% endblock %}
 {% block content %}
-    <!-- 热门分类展示 -->
-    {% for category in hot_categories %}
-        <div class="category-section">
-            <h2>{{ category.name }}</h2>
-            <div class="product-grid">
-                {% for product in category_products[category] %}
-                    <div class="product-card">
-                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                        <h3>{{ product.name }}</h3>
-                        <p>¥{{ product.price }}</p>
+
+<div class="container py-4">
+    <!-- Advertisement -->
+    <div class="section mb-5">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='images/black_friday.jpg') }}"
+                         class="card-img-top card-image">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end text-white card-overlay">
+                        <h3 class="card-title-index">Black Friday</h3>
+                        <p>Up to 70% discount!</p>
                     </div>
-                {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <img src="{{ url_for('static', filename='images/free_delivery.jpg') }}"
+                         class="card-img-top card-image">
+                    <div class="card-img-overlay d-flex flex-column justify-content-end text-white card-overlay">
+                        <h3 class="card-title">Free Delivery</h3>
+                        <p>Free delivery home!</p>
+                    </div>
+                </div>
             </div>
         </div>
-    {% endfor %}
+    </div>
+
+    <!-- The recommend based on the click -->
+    {% if recommended_products %}
+    <div class="section mb-5 recommend-section">
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="index-head">Most Viewed : {{ recommended_category.name }}</h2>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for product in recommended_products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ product.image_url }}"
+                         alt="{{ product.name }}"
+                         class="card-img-top index-product-image">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                        <h5 class="card-text">¥{{ "%.2f"|format(product.price) }}</h5>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <a href="{{ url_for('product_detail', id=product.id) }}"
+                               class="btn btn-outline-primary">View detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 基于收藏的推荐 -->
+    {% if favorite_recommendations %}
+    <div class="section mb-5 recommend-section">
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="index-head">Recommended For You</h2>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for product in favorite_recommendations %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ product.image_url }}"
+                         class="card-img-top index-product-image"
+                         alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                        <h5 class="card-text">¥{{ "%.2f"|format(product.price) }}</h5>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <a href="{{ url_for('product_detail', id=product.id) }}"
+                               class="btn btn-outline-primary">View detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 最近收藏部分 -->
+    {% if current_user.is_authenticated and recent_favorites %}
+    <div class="section mb-5 recommend-section-small">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="index-head">Recently Favorited</h2>
+        </div>
+        <div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+            {% for product in recent_favorites %}
+            <div class="col">
+                <a href="{{ url_for('product_detail', id=product.id) }}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm hover-shadow">
+                        <img src="{{ product.image_url }}"
+                             class="card-img-top index-product-image show-image"
+                             alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h6 class="card-title text-truncate text-dark">{{ product.name }}</h6>
+                            <p class="card-text text-dark"><strong>¥{{ "%.2f"|format(product.price) }}</strong></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 最近浏览部分 -->
+    <div class="section mb-5 recommend-section-small">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="index-head">Recently Viewed</h2>
+        </div>
+        <div id="recent-products" class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-4">
+            {% for product in recent_products %}
+            <div class="col">
+                <a href="{{ url_for('product_detail', id=product.id) }}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm hover-shadow">
+                        <img src="{{ product.image_url }}"
+                             class="card-img-top index-product-image show-image"
+                             alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h6 class="card-title text-truncate text-dark">{{ product.name }}</h6>
+                            <p class="card-text text-dark"><strong>¥{{ "%.2f"|format(product.price) }}</strong></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

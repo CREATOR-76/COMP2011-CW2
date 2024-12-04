@@ -2,22 +2,130 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/5.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
+    <script src="../static/js/basic_function.js" defer></script>
+    <script src="../static/js/cart.js" defer></script>
 </head>
 <body>
-    <nav>
-        <!-- 导航栏部分 -->
-        <div class="search-container">
-            <form method="POST" action="{{ url_for('search') }}">
-                {{ search_form.hidden_tag() }}
-                {{ search_form.query(class="search-input", placeholder="搜索商品...") }}
-                {{ search_form.submit(class="search-button") }}
-            </form>
-        </div>
-    </nav>
 
-    <div class="content">
-        {% block content %}{% endblock %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('index') }}">E-Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left Navigation -->
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item homepage-title">
+                    <a class="nav-link {% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">Homepage</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'category' and gender == 'Men' %}active{% endif %}"
+                       href="{{ url_for('category', gender='Men') }}">Men Shoes</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'category' and gender == 'Women' %}active{% endif %}"
+                       href="{{ url_for('category', gender='Women') }}">Women Shoes</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'category' and gender == 'Boys' %}active{% endif %}"
+                       href="{{ url_for('category', gender='Boys') }}">Boys Clothes</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'category' and gender == 'Girls' %}active{% endif %}"
+                       href="{{ url_for('category', gender='Girls') }}">Girls Clothes</a>
+                </li>
+                </ul>
+
+            <!-- Search -->
+            <form class="d-flex me-3" method="POST" action="{{ url_for('search') }}">
+                {{ search_form.hidden_tag() }}
+                {{ search_form.query(class="form-control me-2", placeholder="Search...") }}
+                {{ search_form.submit(class="btn btn-success") }}
+            </form>
+
+            <!-- User -->
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown"
+                           role="button" data-bs-toggle="dropdown">
+                            {{ current_user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('user_profile') }}">User</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('cart') }}">Chat</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('order_list') }}">Order</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('auth') }}">Sign in/up</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
+</nav>
+
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<footer>
+    <div class="footer-bar">
+        <div class="back-to-top" id="backToTop">
+            Back to Top
+        </div>
+        <div class="footer-bar-web">
+            <a href="https://www.gov.uk/guidance/vat-and-overseas-goods-sold-to-customers-in-the-uk-using-online-marketplaces.zh?utm_source=chatgpt.com">Vat Problem</a>
+            <a href="https://www.gov.uk/guidance/product-recalls-and-alerts?utm_source=chatgpt.com">Product Recall</a>
+            <a href="https://www.legislation.gov.uk/uksi/2005/1803/contents?utm_source=chatgpt.com">Product Safety</a>
+        </div>
+    </div>
+    <hr>
+    <div class="copyright">
+        <ul>
+            <li>leeds-School-Chen-Yixian. © 2023</li>
+            <li>Connect information:sc22y3c@leeds.ac.uk</li>
+            <li>Git Hub: sc22y3c@leeds.ac.uk</li>
+        </ul>
+        <div class="copyright-image">
+            <h1>Follow us:</h1>
+            <a href="https://weibo.com/chengdu2021">
+                <img src="../static/images/twitter.png" alt="Twitter">
+            </a>
+            <a href="https://www.douyin.com/user/MS4wLjABAAAAhYzV8F3MC3UD_zNNVlbkbq-jyCNoz313tdsuWIa07SV0cM0nOuwtUE2dsifXgpj4">
+                <img src="../static/images/tiktok.png" alt="Tik Tok">
+            </a>
+            <a href="https://www.fisu.net/">
+                <img src="../static/images/Youtube-fill.png" alt="Youtube">
+            </a>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

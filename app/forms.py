@@ -2,37 +2,40 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, SearchField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
+# Login form
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[
-        DataRequired(message='Email不能为空'),
-        Email(message='请输入有效的email地址')
+        DataRequired(message='The email address cannot be empty'),
+        Email(message='The email is not valid')
     ])
     password = PasswordField('Password', validators=[
-        DataRequired(message='密码不能为空')
+        DataRequired(message='The password cannot be empty')
     ])
-    submit = SubmitField('登录')
+    submit = SubmitField('Login')
 
+# Register Form
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[
-        DataRequired(message='用户名不能为空'),
-        Length(min=2, max=20, message='用户名长度必须在2-20之间')
+        DataRequired(message='The username cannot be empty'),
+        Length(min=2, max=20, message='Username must be between 2 and 20 characters')
     ])
     email = StringField('Email', validators=[
-        DataRequired(message='Email不能为空'),
-        Email(message='请输入有效的email地址')
+        DataRequired(message='Email can not be empty'),
+        Email(message='the e-mail is invalid')
     ])
     password = PasswordField('Password', validators=[
-        DataRequired(message='密码不能为空'),
-        Length(min=6, message='密码至少需要6个字符')
+        DataRequired(message='passport can not be empty'),
+        Length(min=6, message='at least 6 characters')
     ])
     confirm_password = PasswordField('Confirm Password', validators=[
-        DataRequired(message='请确认密码'),
-        EqualTo('password', message='两次密码输入不一致')
+        DataRequired(message='Please confirm your password'),
+        EqualTo('password', message='The password must match')
     ])
-    submit = SubmitField('注册')
+    submit = SubmitField('Register')
 
+# Search Form
 class SearchForm(FlaskForm):
     query = StringField('Search', validators=[
-        DataRequired(message='请输入搜索内容')
+        DataRequired(message='Please enter content')
     ])
-    submit = SubmitField('搜索')
+    submit = SubmitField('Search')

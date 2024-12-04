@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- 页面标题部分 -->
+    <div class="row mb-4">
+        <div class="col">
+            {% if search_query %}
+                <h2 class="text-center">Results for "{{ search_query }}"</h2>
+            {% else %}
+                <h2 class="text-center">All Products</h2>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 商品展示部分 -->
+    {% if products %}
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for product in products %}
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="{{ product.image_url }}"
+                         class="card-img-top"
+                         alt="{{ product.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                        <p class="card-text">
+                            <strong class="text-primary">¥{{ "%.2f"|format(product.price) }}</strong>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white border-top-0">
+                        <div class="d-grid">
+                            <a href="{{ url_for('product_detail', id=product.id) }}"
+                               class="btn btn-outline-primary">View Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- 分页导航 -->
+        {% if pagination and pagination.pages > 1 %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- 上一页按钮 -->
+                <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+                    <a class="page-link"
+                       href="{% if pagination.has_prev %}{{ url_for('search', page=pagination.prev_num, query=search_query) }}{% else %}#{% endif %}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="d-none d-sm-inline">Last Page</span>
+                    </a>
+                </li>
+
+                <!-- 页码按钮 -->
+                {% for page in pagination.iter_pages(left_edge=2, left_current=2, right_current=2, right_edge=2) %}
+                    {% if page %}
+                        <li class="page-item {% if page == pagination.page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('search', page=page, query=search_query) }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- 下一页按钮 -->
+                <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+                    <a class="page-link"
+                       href="{% if pagination.has_next %}{{ url_for('search', page=pagination.next_num, query=search_query) }}{% else %}#{% endif %}"
+                       aria-label="Next">
+                        <span class="d-none d-sm-inline">Next page</span>
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+    {% else %}
+        <!-- 无商品时的显示 -->
+        <div class="text-center py-5">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">No Products Found</h4>
+                {% if search_query %}
+                    <p class="mb-0">No results for "{{ search_query }}".</p>
+                {% else %}
+                    <p class="mb-0">No products available.</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

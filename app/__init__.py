@@ -9,6 +9,15 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+login_manager = LoginManager(app)
+login_manager.login_view = 'auth'
+
+# 用户加载函数
+@login_manager.user_loader
+def load_user(id):
+    from app.models import User
+    return User.query.get(int(id))
+
 from app import views, models, forms
 
 
