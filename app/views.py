@@ -30,6 +30,15 @@ def index():
                 Product.id != last_viewed_product.id
             ).order_by(db.func.random()).limit(4).all()
 
+    # Recommend the highest click_amount products
+    if not recommended_products:
+        most_clicked_category = Category.query.order_by(Category.click_count.desc()).first()
+        if most_clicked_category:
+            recommended_category = most_clicked_category
+            recommended_products = Product.query.filter_by(
+                category_id=most_clicked_category.id
+            ).order_by(db.func.random()).limit(4).all()
+
     # Recommend the product similar to the favorite
     favorite_recommendations = []
     if current_user.is_authenticated:
